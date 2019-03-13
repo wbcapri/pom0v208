@@ -1,0 +1,33 @@
+import java.io.Console;
+import java.sql.*;
+import oracle.jdbc.OracleConnection;
+import oracle.jdbc.driver.OracleDriver;
+
+public class FirstJavaProgram {
+  public static void main(String[] args) throws SQLException {
+              Connection con=(DriverManager.getConnection("jdbc:oracle:thin:@//s01wietestc1.pkobp.pl:1521/TMDM","T4_APPL_PRESTO_MDM_USR","Zaq123Edc!"));
+//                ( (oracle.jdbc.driver.OracleConnection)con ).setIncludeSynonyms(true);
+
+              String schema = "N1403923";
+              String table = "VALA";
+              String sql ="select owner from ALL_TABLES where owner not in ('SYS', 'SYSTEM', 'XDB', 'OUTLN') group by owner";
+
+              Statement select = con.createStatement();
+              ResultSet result = select.executeQuery(sql);
+              System.out.println("Start sql");
+                    while (result.next()) { // process results one row at a time
+                        String schema1 = result.getString("OWNER");
+                       System.out.println("val = " + schema1);
+                  }
+              System.out.println("Stop sql");
+
+              result =  con.getMetaData().getColumns(null, schema, table, null);
+
+              while (result.next()) {
+                  String str =  result.getString("COLUMN_NAME");
+                  System.out.println(str);
+              }
+             System.out.println("This is my first program in java");
+  }//End of main
+}//End of FirstJavaProgram Class
+
